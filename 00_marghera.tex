@@ -1,0 +1,211 @@
+\documentclass[
+  11pt,
+  a4paper,
+  twoside,
+  openright,
+  DIV=12,
+  numbers=noenddot
+]{scrreprt}
+\raggedbottom
+
+% --- 1. IMPOSTAZIONI BASE ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{sidecap}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{url}
+
+% --- 2. IMMAGINI ---
+\usepackage{graphicx} 
+
+% --- 3. COLORI & GRAFICA ---
+\usepackage{xcolor}
+\usepackage{tikz} 
+
+% --- 4. FONT & TYPO ---
+\usepackage[scaled]{helvet}
+\renewcommand{\familydefault}{\sfdefault} 
+\usepackage{microtype}      
+\usepackage[parfill]{parskip} % Spazio tra paragrafi, no rientro
+
+% --- 5. DEFINIZIONE COLORI ---
+\definecolor{brandColor}{RGB}{230, 80, 10} % Arancione
+\definecolor{darkGrey}{RGB}{40, 40, 40}
+
+% --- 6. GEOMETRIA PAGINA ---
+\usepackage[
+    top=3cm, 
+    bottom=3cm, 
+    inner=3cm, 
+    outer=2cm, 
+    bindingoffset=0.5cm, 
+    headheight=15pt
+]{geometry}
+
+% --- 7. HEADER E FOOTER ---
+\usepackage{scrlayer-scrpage}
+\clearpairofpagestyles
+
+% Linea colorata
+\newcommand{\headerline}{\color{brandColor}\rule{\textwidth}{1.5mm}}
+
+% Header Pari (Sinistra) e Dispari (Destra)
+\lehead[\vspace{0.5em}\headerline]{\textcolor{darkGrey}{\normalfont\small\thepage}\hspace{1em}\textcolor{gray}{\headmark}\\\headerline}
+\rohead[\vspace{0.5em}\headerline]{\textcolor{gray}{\headmark}\hspace{1em}\textcolor{darkGrey}{\normalfont\small\thepage}\\\headerline}
+
+% --- 8. STILE TITOLI (CORRETTO) ---
+% Qui c'era l'errore: bisogna aggiungere [explicit] per usare #1
+\usepackage[explicit]{titlesec}
+
+% Comando per creare il box colorato
+\newcommand{\colorchapter}[1]{%
+    \tikz[baseline=(current bounding box.east)] {
+        \node[
+            rectangle, 
+            fill=brandColor, 
+            text=white, 
+            inner sep=15pt, 
+            text width=\dimexpr\textwidth-30pt\relax, 
+            align=flush right,
+            font=\huge\bfseries
+        ] {#1};
+    }
+}
+
+% Stile Capitolo
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily}
+  {} 
+  {0pt}
+  {\colorchapter{\thechapter \quad #1}} % Ora #1 funziona grazie a [explicit]
+  []
+
+% Stile Sezione (Con [explicit] dobbiamo rimettere #1 alla fine)
+% --- section ---
+\titleformat{\section}
+  {\Large\bfseries\color{darkGrey}}
+  {\textcolor{brandColor}{\vrule width 5pt}\hspace{0.5em}\thesection}
+  {0.5em}
+  {#1}
+
+% --- subsection---
+\titleformat{\subsection}
+  {\large\bfseries\color{darkGrey}}
+  {\textcolor{brandColor}{\vrule width 3pt}\hspace{0.5em}\thesubsection}
+  {0.5em}
+  {#1}
+
+% --- subsubsection ---
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{darkGrey}}
+  {\textcolor{brandColor}{\vrule width 1.5pt}\hspace{0.5em}\thesubsubsection}
+  {0.5em}
+  {#1}
+
+% --- 9. DIDASCALIE E LINK ---
+\usepackage{caption}
+\captionsetup{font={small,sf}, labelfont={bf, color=brandColor}}
+\usepackage[hidelinks]{hyperref}
+\KOMAoption{bibliography}{totocnumbered}
+
+% ==========================================
+\begin{document}
+
+% --- FRONTESPIZIO ---
+\begin{titlepage}
+    \pagecolor{darkGrey} 
+    \color{white}        
+    \newgeometry{margin=2cm}
+    
+    \vspace*{1cm}
+    
+    % --- RIGA LOGO E TESTO ---
+    \noindent
+    \begin{minipage}[b]{0.7\textwidth} % Testo a sinistra
+        \Large Sapienza Università di Roma \\
+        \textbf{Exam}: Sustainable Development and Planning
+    \end{minipage}
+    \begin{minipage}[b]{0.3\textwidth} % Logo a destra
+        \raggedleft
+        \includegraphics[width=5cm]{images/00_logo.png} % Sostituisci con il nome del file
+    \end{minipage}
+    
+    \vspace{4cm}
+    
+    % --- TITOLO (Box Arancione) ---
+    \noindent\colorbox{brandColor}{
+        \parbox{\dimexpr\textwidth-2\fboxsep}{
+            \vspace{0.5cm}
+            \centering\Huge\bfseries
+            PORTO MARGHERA: A CASE STUDY
+            \vspace{0.5cm}
+        }
+    }
+    
+    \vspace{0.5cm}
+    \noindent{\huge Final report}
+
+    % --- NUOVA IMMAGINE ALLINEATA A DESTRA ---
+    \vspace{1cm} % Spazio dopo "Final report"
+    \begin{flushright}
+        \includegraphics[width=0.56\textwidth]{images/00_copertina.png} % Regola width per la dimensione
+    \end{flushright}
+    
+    \vfill
+    
+    \noindent\textbf{Students:} Clément Cazajous, Martina Cumo, Anna De Nardi \\
+    \textbf{Professor:} Carlo Cellamare \\
+    \textbf{Year:} 2025/2026
+    
+\end{titlepage}
+\restoregeometry
+\nopagecolor 
+\color{black} 
+
+% --- INDICE ---
+\tableofcontents
+
+% --- CAPITOLO 1 ---
+\chapter{Contextualization}
+\input{01_part1.tex}
+
+% --- CAPITOLO 2 ---
+\chapter{Legislative and Planning Framework}
+\input{02_part2.tex}
+
+% --- CAPITOLO 3 ---
+\chapter{Planning solutions}
+\input{03_part3.tex}
+
+\chapter{Conclusion and annexes}
+This work analyzed Porto Marghera under various aspects in the attempt of giving to the reader the clearest picture as possible. In the fist part of this work, the presentation of the area with its characteristics and issues was given, which was followed, in the second part, by the analysis of the legislative framework in which Porto Marghera finds itself. This step clearly showed that an extensive legislative work was done on the area, especially due to the increasing awareness of the environmental disaster that the whole place testified, and also that the area was never completely given up on, considering the active presence of projects for the area, even though not unitarily coordinated. Perhaps the lack of a general plan and regulation for the area was the beginning of the problem itself. However, given the present patch-worked condition of Porto Marghera, this work affirmed in the third part that it is now utopian to think about an all-inclusive masterplan on Porto Marghera. Thus, some separate project proposals are presented in the last part of this work, trying to keep a realistic sight on the condition of the area. 
+
+All in all, this work led to the conclusion that the current  state of Porto Marghera is the result of a series of actions of humans guided often by their own self interest and the unconsciousness of the consequences of these. In addition to this, the lack of a common path to assess the issue prolonged the critical situation for years. Planning in such conditions becomes a matter to be dealt with carefully, by people that consider the common social, environmental and physical wellness before the private interest. Citizens have to be involved in the planning process since they are the first to feel the effect of it and the most important power they already have on this is the elective one: choosing consciously their own representatives inside the municipality is the most fundamental right and duty that a citizen can exercise.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{images/03_pollution.png}
+\caption{Photo of the dispersion of pollutants inside the lagoon. Image extracted from \cite{mag_acque}.}
+\label{fig:pollution2}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{images/02_trasformabilitapat.png}
+\caption{Graphical representation of the convertibility plan of the PAT, re-designed by Peron I. \cite{peron}. This map was used to project the proposals of chapter 3.}
+\label{fig:convertibility}
+\end{figure}
+
+% --- Bibliography---
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{bibliography}
+
+\end{document} 
